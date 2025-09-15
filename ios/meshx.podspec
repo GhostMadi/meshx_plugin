@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
 meshx — Flutter plugin prototype that provides a Bridgefy-style API for offline messaging.
 This podspec is for the iOS part of the plugin (Swift).
   DESC
-  s.homepage         = 'https://github.com/example/meshx'
+  s.homepage         = 'https://github.com/GhostMadi/meshx_plugin.git'
   s.license          = { :type => 'MIT', :file => '../LICENSE' }
   s.author           = { 'meshx' => 'opensource@example.com' }
   s.source           = { :path => '.' }
