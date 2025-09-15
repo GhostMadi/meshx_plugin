@@ -36,52 +36,44 @@ public class MeshxPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         result(nil)
       case "sendBytes":
         let id = UUID().uuidString
+        let args = call.arguments as? [String: Any] ?? [:]
+        let toPeer = args["toPeerId"] as? String
+
+        var sent: [String: Any] = [
+          "id": id,
+          "mode": args["mode"] as? Int ?? 1,
+          "qos":  args["qos"]  as? Int ?? 1,
+          "retries": 0
+        ]
+        if let toPeer = toPeer {
+          sent["toPeerId"] = toPeer
+        }
+
         self.eventSink?([
           "type": "messageSent",
-          "data": ["id": id, "toPeerId": (call.arguments as? [String: Any])?["toPeerId"] as? String ?? NSNull(), "mode": (call.arguments as? [String: Any])?["mode"] as? Int ?? 1, "qos": (call.arguments as? [String: Any])?["qos"] as? Int ?? 1, "retries": 0]
+          "data": sent
         ])
         result(id)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-          let args = call.arguments as? [String: Any]
-          let data = args?["data"] as? FlutterStandardTypedData
-          self.eventSink?([
-            "type": "messageReceived",
-            "data": [
-              "id": id,
-              "fromPeerId": "peer-ios-demo",
-              "mode": args?["mode"] as? Int ?? 1,
-              "hopCount": 0,
-              "ttl": args?["ttl"] as? Int ?? 4,
-              "payload": ["type": "bytes", "data": data?.data.map { Int($0) } ?? []],
-              "receivedAt": Int(Date().timeIntervalSince1970 * 1000),
-              "meta": [:]
-            ]
-          ])
-        }
       case "sendJson":
         let id = UUID().uuidString
+        let args = call.arguments as? [String: Any] ?? [:]
+        let toPeer = args["toPeerId"] as? String
+
+        var sent: [String: Any] = [
+          "id": id,
+          "mode": args["mode"] as? Int ?? 1,
+          "qos":  args["qos"]  as? Int ?? 1,
+          "retries": 0
+        ]
+        if let toPeer = toPeer {
+          sent["toPeerId"] = toPeer
+        }
+
         self.eventSink?([
           "type": "messageSent",
-          "data": ["id": id, "toPeerId": (call.arguments as? [String: Any])?["toPeerId"] as? String ?? NSNull(), "mode": (call.arguments as? [String: Any])?["mode"] as? Int ?? 1, "qos": (call.arguments as? [String: Any])?["qos"] as? Int ?? 1, "retries": 0]
+          "data": sent
         ])
-        result(id)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-          let args = call.arguments as? [String: Any]
-          let json = args?["json"] as? [String: Any] ?? [:]
-          self.eventSink?([
-            "type": "messageReceived",
-            "data": [
-              "id": id,
-              "fromPeerId": "peer-ios-demo",
-              "mode": args?["mode"] as? Int ?? 1,
-              "hopCount": 0,
-              "ttl": args?["ttl"] as? Int ?? 4,
-              "payload": ["type": "json", "data": json],
-              "receivedAt": Int(Date().timeIntervalSince1970 * 1000),
-              "meta": [:]
-            ]
-          ])
-        }
+  result(id)
       case "sendFile":
         let id = UUID().uuidString
         result(id)
